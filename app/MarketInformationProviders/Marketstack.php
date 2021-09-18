@@ -24,7 +24,7 @@ class Marketstack implements MarketProvider
         );
     }
 
-    public function getDataForTicker(string $ticker)
+    public function getDataForTicker(string $ticker): array
     {
         return $this->client()
              ->get('eod', [
