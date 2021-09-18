@@ -27,4 +27,4 @@ it('updates crypto prices', function () {
 
     expect($solana->prices->count())->toBe(1)
         ->and($solana->prices->count())->toBe(1);
-});
+})->skip(fn () => env('RUN_EXTERNAL_TESTS') != true, 'Only runs on external tests.');
