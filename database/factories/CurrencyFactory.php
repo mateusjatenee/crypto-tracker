@@ -22,7 +22,8 @@ class CurrencyFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->name,
+            'code' => 'USD',
         ];
     }
 }
