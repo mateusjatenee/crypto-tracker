@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\AssetType;
 use App\Models\Asset;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,5 +26,14 @@ class AssetFactory extends Factory
             'name' => $this->faker->name,
             'code' => 'BBDC4'
         ];
+    }
+
+    public function crypto()
+    {
+        return $this->state(function ($state) {
+            return [
+                'type' => AssetType::CRYPTO
+            ];
+        });
     }
 }

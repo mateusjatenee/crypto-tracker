@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use App\Enums\AssetType;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Market\FreshAsset;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Asset extends Model
 {
@@ -16,6 +19,16 @@ class Asset extends Model
         'type',
         'current_price'
     ];
+
+    public function prices(): MorphMany
+    {
+        return $this->morphMany(Price::class, 'priceable');
+    }
+
+    public function scopeCrypto(Builder $query): Builder
+    {
+        return $query->where('type', AssetType::CRYPTO);
+    }
 
     public function currentPriceForQuantity(int $quantity): float
     {
@@ -30,5 +43,17 @@ class Asset extends Model
     public function isBrazilian(): bool
     {
         return $this->isStock();
+    }
+
+    public function updateFromFreshAsset(FreshAsset $freshAsset): void
+    {
+        $this->update([
+            'current_price' => $freshAsset->price
+        ]);
+
+        $this->prices()->create([
+            'price' => $freshAsset->price,
+            'local_price' => $freshAsset->price
+        ]);
     }
 }
