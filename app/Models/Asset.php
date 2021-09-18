@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AssetType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,5 +20,15 @@ class Asset extends Model
     public function currentPriceForQuantity(int $quantity): float
     {
         return $this->current_price * $quantity;
+    }
+
+    public function isStock(): bool
+    {
+        return $this->type === AssetType::STOCK;
+    }
+
+    public function isBrazilian(): bool
+    {
+        return $this->isStock();
     }
 }
