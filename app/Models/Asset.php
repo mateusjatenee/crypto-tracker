@@ -15,4 +15,9 @@ class Asset extends Model
         'type',
         'current_price'
     ];
+
+    public function currentPriceForQuantity(int $quantity): float
+    {
+        return $this->current_price * $quantity;
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\Transactionable;
 use App\Models\Transaction;
 use App\Transactions\CashTransaction;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,14 +30,15 @@ class Account extends Model
         return $this->belongsTo(Team::class);
     }
 
-    public function addTransaction(Transactionable $transactionable): Transaction
+    public function addTransaction(Transactionable $transactionable, Carbon $date = null): Transaction
     {
         return $this->transactions()->create([
             'name' => $transactionable->name(),
             'amount' => $transactionable->amount(),
             'quantity' => $transactionable->quantity(),
             'asset_id' => $transactionable->asset()?->id,
-            'team_id' => $this->team_id
+            'team_id' => $this->team_id,
+            'date' => $date ?? now()
         ]);
     }
 

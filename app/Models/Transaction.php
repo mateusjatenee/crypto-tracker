@@ -14,13 +14,15 @@ class Transaction extends Model
         'name',
         'amount',
         'quantity',
+        'date',
         'team_id',
         'asset_id'
     ];
 
     protected $casts = [
         'amount' => 'float',
-        'quantity' => 'integer'
+        'quantity' => 'integer',
+        'date' => 'datetime'
     ];
 
     public function team(): BelongsTo
@@ -45,10 +47,8 @@ class Transaction extends Model
 
     public function total(): float
     {
-        if ($this->asset) {
-            return $this->asset->current_price * $this->quantity;
-        }
-
-        return $this->amount * $this->quantity;
+        return $this->asset
+            ? $this->asset->currentPriceForQuantity($this->quantity)
+            : ($this->amount * $this->quantity);
     }
 }

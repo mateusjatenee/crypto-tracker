@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\AccountType;
 use App\Models\Account;
 use App\Models\Asset;
 use App\Models\Currency;
@@ -26,6 +27,7 @@ class AccountFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
+            'type' => AccountType::CASH,
             'team_id' => Team::factory(),
             'currency_id' => Currency::factory()
         ];

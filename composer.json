@@ -15,6 +15,7 @@
         "livewire/livewire": "^2.5"
     },
     "require-dev": {
+        "brianium/paratest": "^6.3",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
@@ -22,6 +23,7 @@
         "nunomaduro/collision": "^5.0",
         "pestphp/pest": "^1.18",
         "pestphp/pest-plugin-laravel": "^1.1",
+        "pestphp/pest-plugin-parallel": "^0.3.1",
         "phpunit/phpunit": "^9.3.3"
     },
     "autoload": {
