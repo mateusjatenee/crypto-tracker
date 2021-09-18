@@ -32,4 +32,23 @@ class Transaction extends Model
     {
         return $this->belongsTo(Account::class);
     }
+
+    public function asset(): BelongsTo
+    {
+        return $this->belongsTo(Asset::class);
+    }
+
+    public function totalInvested(): float
+    {
+        return $this->amount * $this->quantity;
+    }
+
+    public function total(): float
+    {
+        if ($this->asset) {
+            return $this->asset->current_price * $this->quantity;
+        }
+
+        return $this->amount * $this->quantity;
+    }
 }

@@ -18,6 +18,7 @@ class CreateAssetsTable extends Migration
             $table->string('name');
             $table->string('code');
             $table->string('type');
+            $table->decimal('current_price')->nullable();
             $table->timestamps();
         });
     }

@@ -12,6 +12,7 @@ class Asset extends Model
     protected $fillable = [
         'name',
         'code',
-        'type'
+        'type',
+        'current_price'
     ];
 }

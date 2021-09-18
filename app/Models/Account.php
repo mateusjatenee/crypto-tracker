@@ -35,7 +35,7 @@ class Account extends Model
             'name' => $transactionable->name(),
             'amount' => $transactionable->amount(),
             'quantity' => $transactionable->quantity(),
-            'asset_id' => $transactionable->asset(),
+            'asset_id' => $transactionable->asset()?->id,
             'team_id' => $this->team_id
         ]);
     }
@@ -49,6 +49,16 @@ class Account extends Model
 
     public function balance(): float
     {
-        return $this->transactions->sum('amount');
+        return $this->transactions->sum(fn (Transaction $transaction) => $transaction->total());
+    }
+
+    public function totalInvested(): float
+    {
+        return $this->transactions->sum(fn (Transaction $transaction) => $transaction->totalInvested());
+    }
+
+    public function profit(): float
+    {
+        return $this->balance() - $this->totalInvested();
     }
 }
