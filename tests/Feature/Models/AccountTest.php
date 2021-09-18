@@ -71,7 +71,8 @@ it('it calculates the balance of an asset when it contains variable transactions
 
     $account->refresh();
 
-    expect($account->balance())->toBe(4400.00);
-    expect($account->totalInvested())->toBe(1820.00);
-    expect($account->profit())->toBe(2580.00);
+    expect($account)
+        ->balance()->toBe(4400.00)
+        ->totalInvested()->toBe(1820.00)
+        ->profit()->toBe(2580.00);
 });
