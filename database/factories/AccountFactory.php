@@ -2,19 +2,20 @@
 
 namespace Database\Factories;
 
+use App\Models\Account;
 use App\Models\Asset;
 use App\Models\Currency;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AssetFactory extends Factory
+class AccountFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Asset::class;
+    protected $model = Account::class;
 
     /**
      * Define the model's default state.

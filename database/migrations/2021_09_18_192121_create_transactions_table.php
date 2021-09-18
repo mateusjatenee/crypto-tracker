@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Account;
 use App\Models\Asset;
 use App\Models\Team;
 use Illuminate\Database\Migrations\Migration;
@@ -19,7 +20,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->decimal('amount');
-            $table->foreignIdFor(Asset::class);
+            $table->foreignIdFor(Account::class);
             $table->foreignIdFor(Team::class);
             $table->timestamps();
         });

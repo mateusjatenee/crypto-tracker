@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Asset;
 use App\Models\Team;
+use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -26,7 +26,7 @@ class TransactionFactory extends Factory
         return [
             'name' => $this->faker->name,
             'amount' => rand(1, 1000),
-            'asset_id' => Asset::factory(),
+            'account_id' => Account::factory(),
             'team_id' => Team::factory()
         ];
     }
