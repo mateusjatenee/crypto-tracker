@@ -20,6 +20,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->decimal('amount');
+            $table->integer('quantity');
             $table->foreignIdFor(Account::class);
             $table->foreignIdFor(Team::class);
             $table->foreignIdFor(Asset::class)->nullable();

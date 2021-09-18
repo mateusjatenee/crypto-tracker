@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Account;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /*
@@ -45,4 +46,10 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+
+function account(array $attributes = []): Account
+{
+    return Account::factory()->create($attributes);
 }
