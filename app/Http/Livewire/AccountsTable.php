@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Account;
 use App\Models\Currency;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class AccountsTable extends Component
@@ -25,13 +26,14 @@ class AccountsTable extends Component
     public function createAccount()
     {
         Validator::make($this->data, [
-            'name' => ['required', 'string']
+            'name' => ['required', 'string'],
+            'type' => ['required', Rule::in(Account::TYPES)]
         ]);
 
         team()->accounts()->create([
             'name' => $this->data['name'],
             'type' => $this->data['type'],
-            'currency_id' => Currency::whereCode($this->data['currency'])->first()->id
+            'currency_id' => Currency::find($this->data['currency'])->id
         ]);
 
         return $this->redirect('dashboard');

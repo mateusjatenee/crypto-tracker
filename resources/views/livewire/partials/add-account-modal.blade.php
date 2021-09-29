@@ -11,7 +11,7 @@
                 </label>
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                     <div class="max-w-lg flex rounded-md shadow-sm">
-                        <input type="text" name="name" id="name"
+                        <input type="text" name="name" id="name" wire:model="data.name"
                             class="flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300">
                     </div>
                 </div>
@@ -22,7 +22,7 @@
                     Account Type
                 </label>
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <select id="type" name="type"
+                    <select id="type" name="type" wire:model="data.type"
                         class="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
                         @foreach ($this->availableAccountTypes as $slug => $type)
                             <option value="{{ $slug }}">{{ $type }}</option>
@@ -36,9 +36,9 @@
                     Currency
                 </label>
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <select id="currency" name="currency"
+                    <select id="currency" name="currency" wire:model="data.currency"
                         class="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
-                        <option value="USD">USD</option>
+                        <option value="1">USD</option>
                     </select>
                 </div>
             </div>
@@ -50,7 +50,7 @@
             {{ __('Cancel') }}
         </x-jet-secondary-button>
 
-        <x-buttons.branded-button class="ml-2" wire:click="createAccount" wire:loading.attr="disabled">
+        <x-buttons.branded-button class="ml-2" wire:click="createAccount" wire:loading.class="opacity-75" wire:loading.attr="disabled">
             {{ __('Save') }}
         </x-buttons.branded-button>
     </x-slot>
