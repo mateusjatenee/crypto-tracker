@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\Transactionable;
+use App\Enums\AccountType;
 use App\Models\Transaction;
 use App\Transactions\CashTransaction;
 use Carbon\Carbon;
@@ -17,7 +18,15 @@ class Account extends Model
 
     protected $fillable = [
         'name',
+        'type',
+        'currency_id',
         'team_id'
+    ];
+
+    const TYPES = [
+        AccountType::CRYPTO => 'Crypto',
+        AccountType::STOCKS => 'Stocks',
+        AccountType::CASH => 'Bank'
     ];
 
     public function transactions(): HasMany
@@ -28,6 +37,11 @@ class Account extends Model
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class);
     }
 
     public function addTransaction(Transactionable $transactionable, Carbon $date = null): Transaction

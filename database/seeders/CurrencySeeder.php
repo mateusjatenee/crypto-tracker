@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Currency;
 use Illuminate\Database\Seeder;
 
 class CurrencySeeder extends Seeder
@@ -13,6 +14,14 @@ class CurrencySeeder extends Seeder
      */
     public function run()
     {
-        //
+        Currency::create([
+            'name' => 'Brazilian Real',
+            'code' => 'BRL'
+        ]);
+
+        Currency::create([
+            'name' => 'U.S Dollar',
+            'code' => 'USD'
+        ]);
     }
 }

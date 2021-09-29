@@ -45,13 +45,10 @@
                     </h3>
                 </div>
             </div>
-
+            
             <div class="bg-white sm:px-4 py-5 border-b border-gray-200 sm:px-6 col-span-5">
                 <div class="col-span-5">
-                    <h3 class="text-xl leading-6 font-semibold tracking-tight text-gray-900 inline-flex">
-                        <x-heroicon-o-chart-bar class="w-5 h-5 mr-1 text-green-600" /> Asset Development
-                    </h3>
-                    <canvas class="p-10 " id="chartLine"></canvas>
+                    @livewire('accounts-table')
                 </div>
             </div>
             <div class="bg-white sm:px-4 py-5 border-b border-gray-200 sm:px-6 col-span-3">
