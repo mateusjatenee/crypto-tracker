@@ -9,18 +9,20 @@ use Illuminate\Support\Collection;
 
 class AccountService
 {
+    /**
+     * Get the individual position for each asset.
+     *
+     * @param \App\Models\Account $account
+     * @return \Illuminate\Support\Collection<\App\Position>
+     */
     public function getPositions(Account $account): Collection
     {
-        $transactions = $account->transactions()->with('asset')->get();
-
-        $transactions = $transactions
-            ->groupBy(fn ($transaction) => $transaction->asset->id)
-            ->map(function (Collection $transactions) {
-                $asset = $transactions->first()->asset;
-
-                return Position::fromTransactions($transactions, $asset);
-            });
-
-        return $transactions;
+        return $account->transactions()
+                ->with('asset')
+                ->get()
+                ->groupBy(fn ($transaction) => $transaction->asset->id)
+                ->map(function (Collection $transactions) {
+                    return Position::fromTransactions($transactions, $transactions->first()->asset);
+                });
     }
 }
