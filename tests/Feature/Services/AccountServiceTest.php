@@ -6,6 +6,7 @@ use App\Enums\AssetType;
 use App\Services\AccountService;
 use Database\Factories\AccountFactory;
 use App\Transactions\CryptoTransaction;
+use App\Transactions\StockTransaction;
 
 it('gets assets based on crypto transactions', function () {
     $account = account();
@@ -53,6 +54,50 @@ it('gets assets based on crypto transactions', function () {
         ->asset->is($bitcoin)->toBeTrue();
 });
 
-it('gets assets based on stocks transactions');
+it('gets assets based on stocks transactions', function () {
+    $account = account();
+
+    $bankStock = Asset::factory()->create([
+        'type' => AssetType::STOCK,
+        'code' => 'BANK',
+        'current_price' => 20
+    ]);
+
+    $airlineStock = Asset::factory()->create([
+        'type' => AssetType::STOCK,
+        'code' => 'AIRLINE',
+        'current_price' => 30
+    ]);
+
+    $account->addTransaction(
+        new StockTransaction(15, 100, $bankStock)
+    );
+
+    $account->addTransaction(
+        new StockTransaction(18, 100, $bankStock)
+    );
+
+    $account->addTransaction(
+        new StockTransaction(50, 100, $airlineStock)
+    );
+
+    $positions = (new AccountService)->getPositions($account);
+
+    expect($positions->first())
+        ->averagePrice()->toBe(16.50)
+        ->quantity()->toBe(200.0)
+        ->totalSpent()->toBe(3300.0)
+        ->totalPosition()->toBe(4000.0)
+        ->totalProfit()->toBe(700.0)
+        ->asset->is($bankStock)->toBeTrue();
+
+    expect($positions->last())
+        ->averagePrice()->toBe(50.0)
+        ->quantity()->toBe(100.0)
+        ->totalSpent()->toBe(5000.0)
+        ->totalPosition()->toBe(3000.0)
+        ->totalProfit()->toBe(-2000.0)
+        ->asset->is($airlineStock)->toBeTrue();
+});
 
 it('gets assets based on cash transactions');
