@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums\AccountType;
 use App\Models\Account;
 use App\Models\Currency;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -14,9 +16,16 @@ class AccountsTable extends Component
 
     public array $data = [
         'name' => '',
-        'type' => '',
-        'currency' => ''
+        'type' => AccountType::STOCKS,
+        'currency' => 1
     ];
+
+    public Collection $accounts;
+
+    public function mount()
+    {
+        $this->accounts = team()->accounts;
+    }
 
     public function render()
     {
@@ -52,5 +61,13 @@ class AccountsTable extends Component
     public function getAvailableAccountTypesProperty(): array
     {
         return Account::TYPES;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<\App\Models\Currency>
+     */
+    public function getAvailableCurrenciesProperty(): Collection
+    {
+        return Currency::all();
     }
 }
