@@ -51,7 +51,7 @@ class FetchCoinsPrices extends Command
             }
 
             $this->fetchPrices();
-            sleep(1);
+            sleep(10);
         }
     }
 
