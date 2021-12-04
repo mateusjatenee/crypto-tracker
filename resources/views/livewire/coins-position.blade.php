@@ -1,10 +1,10 @@
 <div wire:poll>
     <div class="px-4 py-2 bg-white shadow-sm rounded-md">
-        <div class="w-full inline-flex justify-between py-1">
-            <h3 class="text-xl leading-6 font-semibold tracking-tight text-gray-900 inline-flex">
-                Position
-            </h3>
-        </div>
+    <div class="w-full inline-flex justify-between py-1">
+        <h3 class="text-xl leading-6 font-semibold tracking-tight text-gray-900 inline-flex">
+            Position
+        </h3>
+    </div>
         <div>
             <ul role="list" class="divide-y divide-gray-200">
                 @foreach ($account->positions() as $position)

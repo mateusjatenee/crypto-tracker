@@ -1,7 +1,7 @@
-<div>
-    <div class="w-full inline-flex justify-between py-1">
+<div class="bg-white py-2 rounded-md shadow-sm">
+    <div class="px-4 w-full inline-flex justify-between py-1">
         <h3 class="text-xl leading-6 font-semibold tracking-tight text-gray-900 inline-flex">
-            <x-heroicon-o-chart-bar class="w-5 h-5 mr-1 text-green-600" /> Transactions
+             Transactions
         </h3>
         @livewire('add-transaction-button', ['account' => $account])
     </div>
@@ -9,7 +9,7 @@
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto">
             <div class="py-2 align-middle inline-block min-w-full">
-                <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <div class="overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>

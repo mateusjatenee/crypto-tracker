@@ -1156,6 +1156,9 @@ select {
 .col-span-8 {
 	grid-column: span 8 / span 8;
 }
+.col-span-1 {
+	grid-column: span 1 / span 1;
+}
 .mx-auto {
 	margin-left: auto;
 	margin-right: auto;
@@ -1418,6 +1421,9 @@ select {
 }
 .flex-col {
 	flex-direction: column;
+}
+.flex-col-reverse {
+	flex-direction: column-reverse;
 }
 .flex-wrap {
 	flex-wrap: wrap;
@@ -2216,6 +2222,10 @@ select {
 
 	.sm\:col-span-2 {
 		grid-column: span 2 / span 2;
+	}
+
+	.sm\:col-span-6 {
+		grid-column: span 6 / span 6;
 	}
 
 	.sm\:mx-0 {

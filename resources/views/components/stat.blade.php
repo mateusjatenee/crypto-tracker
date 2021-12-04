@@ -3,7 +3,7 @@
       {{ $name }}
     </dt>
     <dd class="mt-1 flex justify-between items-baseline md:block lg:flex">
-      <div class="flex items-baseline text-2xl font-bold text-blue-500">
+      <div class="flex items-baseline text-2xl font-bold {{ $value > 0 ? 'text-blue-500' : 'text-red-500' }}">
         $ {{ $formattedValue }}
       </div>
 

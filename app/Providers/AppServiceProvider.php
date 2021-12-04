@@ -28,11 +28,5 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Blade::component('stat', Stat::class);
-
-        if (! auth()->check() && app()->environment('local')) {
-            Auth::login(
-                User::first() ?? User::factory()->withPersonalTeam()->create()
-            );
-        }
     }
 }
