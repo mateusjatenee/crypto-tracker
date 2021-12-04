@@ -21,7 +21,7 @@ class Transaction extends Model
 
     protected $casts = [
         'amount' => 'float',
-        'quantity' => 'integer',
+        'quantity' => 'decimal:17',
         'date' => 'datetime'
     ];
 

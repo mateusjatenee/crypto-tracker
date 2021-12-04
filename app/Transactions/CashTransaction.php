@@ -24,9 +24,9 @@ class CashTransaction implements Transactionable
         return $this->amount;
     }
 
-    public function quantity(): int
+    public function quantity(): float
     {
-        return 1;
+        return 1.0;
     }
 
     public function asset(): ?Asset

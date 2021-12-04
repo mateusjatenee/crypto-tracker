@@ -2,6 +2,7 @@
 
 use App\Enums\AssetType;
 use App\Models\Asset;
+use App\Transactions\CryptoTransaction;
 use App\Transactions\StockTransaction;
 
 it('adds a cash transaction to an account', function () {
@@ -11,7 +12,7 @@ it('adds a cash transaction to an account', function () {
     expect($account->transactions->first())
         ->name->toBe('Some name')
         ->amount->toBe(2000.00)
-        ->quantity->toBe(1)
+        ->quantity->toEqual(1)
         ->asset_id->toBeNull()
         ->user->is($account->user)->toBeTrue();
 });
@@ -75,4 +76,34 @@ it('it calculates the balance of an asset when it contains variable transactions
         ->balance()->toBe(4400.00)
         ->totalInvested()->toBe(1820.00)
         ->profit()->toBe(2580.00);
+});
+
+it('allows you to add a transaction based solely in the crypto values', function () {
+    $account = account();
+
+    $asset = Asset::factory()->create([
+        'name' => 'Bitcoin',
+        'code' => 'BTC',
+        'type' => AssetType::CRYPTO,
+        'current_price' => 48461.32
+    ]);
+
+    $amountBought = 5000; // USD 5000
+    $amountOfBitcoin = $amountBought / $asset->current_price;
+
+    $transaction = CryptoTransaction::fromCrypto(
+        amountOfTokens: $amountOfBitcoin,
+        asset: $asset
+    );
+
+    // Amount refers to the price paid per asset unit
+    expect($transaction)
+        ->amount()->toBe(48461.32)
+        ->quantity()->toBe($amountOfBitcoin)
+        ->total()->toBe(5000.0);
+
+    $transaction = $account->addTransaction($transaction)->fresh();
+
+    expect($transaction)
+        ->totalInvested()->toBe(5000.0);
 });

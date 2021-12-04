@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AccountType;
 use App\Models\Account;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
@@ -64,5 +65,14 @@ class User extends Authenticatable
     public function accounts(): HasMany
     {
         return $this->hasMany(Account::class);
+    }
+
+    public function defaultAccount()
+    {
+        return $this->accounts()->firstOrCreate([], [
+            'name' => 'Default',
+            'type' => AccountType::CRYPTO,
+            'currency_id' => Currency::dollar()
+        ]);
     }
 }

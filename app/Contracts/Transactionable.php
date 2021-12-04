@@ -10,7 +10,7 @@ interface Transactionable
 
     public function amount(): float;
 
-    public function quantity(): int;
+    public function quantity(): float;
 
     public function asset(): ?Asset;
 }

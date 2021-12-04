@@ -25,7 +25,7 @@ class StockTransaction implements Transactionable
         return $this->amount;
     }
 
-    public function quantity(): int
+    public function quantity(): float
     {
         return $this->quantity;
     }

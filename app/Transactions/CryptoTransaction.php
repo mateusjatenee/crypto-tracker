@@ -9,7 +9,7 @@ class CryptoTransaction implements Transactionable
 {
     public function __construct(
         public float $amount,
-        public int $quantity,
+        public float $quantity,
         public Asset $asset
     ) {
         //
@@ -25,13 +25,23 @@ class CryptoTransaction implements Transactionable
         return $this->amount;
     }
 
-    public function quantity(): int
+    public function quantity(): float
     {
         return $this->quantity;
+    }
+
+    public function total(): float
+    {
+        return $this->amount * $this->quantity;
     }
 
     public function asset(): ?Asset
     {
         return $this->asset;
+    }
+
+    public static function fromCrypto(float $amountOfTokens, Asset $asset): self
+    {
+        return new static($asset->current_price, $amountOfTokens, $asset);
     }
 }
