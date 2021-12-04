@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Currency extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'code'
+    ];
+
+    public static function dollar(): self
+    {
+        return self::whereCode('USD')->first();
+    }
 }

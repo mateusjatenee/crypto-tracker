@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Enums\AccountType;
+use Tests\TestCase;
+use App\Models\User;
+use App\Models\Account;
 use Laravel\Fortify\Features;
 use Laravel\Jetstream\Jetstream;
-use Tests\TestCase;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RegistrationTest extends TestCase
 {
@@ -36,6 +39,7 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register()
     {
+        $this->withoutExceptionHandling();
         if (! Features::enabled(Features::registration())) {
             return $this->markTestSkipped('Registration support is not enabled.');
         }
@@ -47,6 +51,15 @@ class RegistrationTest extends TestCase
             'password_confirmation' => 'password',
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature(),
         ]);
+
+        $user = User::first();
+
+        $account = $user->currentTeam->accounts()->first();
+
+        expect($account)
+            ->name->toBe('Default')
+            ->type->toBe(AccountType::CRYPTO)
+            ->team->is($user->currentTeam)->toBeTrue();
 
         $this->assertAuthenticated();
         $response->assertRedirect(RouteServiceProvider::HOME);

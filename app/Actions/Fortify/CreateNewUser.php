@@ -2,6 +2,8 @@
 
 namespace App\Actions\Fortify;
 
+use App\Enums\AccountType;
+use App\Models\Currency;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +37,8 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
             ]), function (User $user) {
-                $this->createTeam($user);
+                $team = $this->createTeam($user);
+                $this->createDefaultAccount($team);
             });
         });
     }
@@ -48,10 +51,19 @@ class CreateNewUser implements CreatesNewUsers
      */
     protected function createTeam(User $user)
     {
-        $user->ownedTeams()->save(Team::forceCreate([
+        return $user->ownedTeams()->save(Team::forceCreate([
             'user_id' => $user->id,
             'name' => explode(' ', $user->name, 2)[0]."'s Team",
             'personal_team' => true,
         ]));
+    }
+
+    protected function createDefaultAccount(Team $team)
+    {
+        $team->accounts()->create([
+            'name' => 'Default',
+            'type' => AccountType::CRYPTO,
+            'currency_id' => Currency::dollar()
+        ]);
     }
 }
