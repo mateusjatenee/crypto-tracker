@@ -2,16 +2,16 @@
 
 namespace App\Jobs;
 
-use App\MarketInformationProviders\Coinbase;
 use App\Models\Asset;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\MarketInformationProviders\Coinbase;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class UpdateCryptoAssetsPrices implements ShouldQueue
+class UpdateCryptoAssetPrice implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -23,7 +23,7 @@ class UpdateCryptoAssetsPrices implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(public Asset $asset)
     {
         //
     }
@@ -35,14 +35,12 @@ class UpdateCryptoAssetsPrices implements ShouldQueue
      */
     public function handle()
     {
-        Asset::crypto()->get()->each(function (Asset $asset) {
-            $freshAsset = resolve(Coinbase::class)->fetchAsset($asset);
+        $freshAsset = resolve(Coinbase::class)->fetchAsset($this->asset);
 
-            if ($freshAsset->price == 0) {
-                return;
-            }
+        if ($freshAsset->price == 0) {
+            return;
+        }
 
-            $asset->updateFromFreshAsset($freshAsset);
-        });
+        $this->asset->updateFromFreshAsset($freshAsset);
     }
 }

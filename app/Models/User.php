@@ -72,7 +72,7 @@ class User extends Authenticatable
         return $this->accounts()->firstOrCreate([], [
             'name' => 'Default',
             'type' => AccountType::CRYPTO,
-            'currency_id' => Currency::dollar()
+            'currency_id' => Currency::dollar()->id
         ]);
     }
 }

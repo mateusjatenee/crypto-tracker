@@ -63,7 +63,7 @@ class CreateNewUser implements CreatesNewUsers
         $user->accounts()->create([
             'name' => 'Default',
             'type' => AccountType::CRYPTO,
-            'currency_id' => Currency::dollar()
+            'currency_id' => Currency::dollar()->id
         ]);
     }
 }

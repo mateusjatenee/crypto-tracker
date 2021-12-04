@@ -30,9 +30,12 @@
 
     <x-container class="py-6">
 
-        <div class="grid md:grid-cols-8 gap-4">
+        <div class="grid md:grid-cols-8 gap-6">
             <div class="col-span-6">
                 @livewire('transactions-table', ['account' => auth()->user()->defaultAccount()])
+            </div>
+            <div class="col-span-2">
+                @livewire('coins-position', ['account' => auth()->user()->defaultAccount()])
             </div>
         </div>
 

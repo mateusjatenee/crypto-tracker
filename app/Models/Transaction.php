@@ -51,4 +51,14 @@ class Transaction extends Model
             ? $this->asset->currentPriceForQuantity($this->quantity)
             : ($this->amount * $this->quantity);
     }
+
+    public function formattedQuantity()
+    {
+        return number_format($this->quantity, 8);
+    }
+
+    public function formattedTotalInvested()
+    {
+        return number_format($this->totalInvested(), 2);
+    }
 }

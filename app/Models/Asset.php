@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\AssetType;
 use App\Market\FreshAsset;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -30,7 +31,7 @@ class Asset extends Model
         return $query->where('type', AssetType::CRYPTO);
     }
 
-    public function currentPriceForQuantity(int $quantity): float
+    public function currentPriceForQuantity(float $quantity): float
     {
         return $this->current_price * $quantity;
     }
@@ -55,5 +56,12 @@ class Asset extends Model
             'price' => $freshAsset->price,
             'local_price' => $freshAsset->price
         ]);
+    }
+
+    public function iconUrl(): string
+    {
+        $code = Str::lower($this->code);
+
+        return "https://cryptoicon-api.vercel.app/api/icon/{$code}";
     }
 }

@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-use App\Contracts\Transactionable;
+use Carbon\Carbon;
 use App\Enums\AccountType;
 use App\Models\Transaction;
+use App\Contracts\Transactionable;
+use App\Services\AccountService;
+use Illuminate\Support\Collection;
 use App\Transactions\CashTransaction;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -53,6 +55,11 @@ class Account extends Model
             'asset_id' => $transactionable->asset()?->id,
             'date' => $date ?? now()
         ]);
+    }
+
+    public function positions(): Collection
+    {
+        return resolve(AccountService::class)->getPositions($this);
     }
 
     public function addCashTransaction(string $name, float $amount): Transaction
