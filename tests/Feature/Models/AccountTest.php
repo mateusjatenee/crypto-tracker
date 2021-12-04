@@ -13,7 +13,7 @@ it('adds a cash transaction to an account', function () {
         ->amount->toBe(2000.00)
         ->quantity->toBe(1)
         ->asset_id->toBeNull()
-        ->team->is($account->team)->toBeTrue();
+        ->user->is($account->user)->toBeTrue();
 });
 
 it('calculates the balance of an account', function () {

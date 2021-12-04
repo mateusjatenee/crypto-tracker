@@ -23,7 +23,7 @@ class Account extends Model
         'team_id'
     ];
 
-    const TYPES = [
+    public const TYPES = [
         AccountType::CRYPTO => 'Crypto',
         AccountType::STOCKS => 'Stocks',
         AccountType::CASH => 'Bank'
@@ -34,9 +34,9 @@ class Account extends Model
         return $this->hasMany(Transaction::class);
     }
 
-    public function team(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(User::class);
     }
 
     public function currency(): BelongsTo
@@ -51,7 +51,6 @@ class Account extends Model
             'amount' => $transactionable->amount(),
             'quantity' => $transactionable->quantity(),
             'asset_id' => $transactionable->asset()?->id,
-            'team_id' => $this->team_id,
             'date' => $date ?? now()
         ]);
     }

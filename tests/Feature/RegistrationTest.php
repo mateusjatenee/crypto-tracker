@@ -54,12 +54,11 @@ class RegistrationTest extends TestCase
 
         $user = User::first();
 
-        $account = $user->currentTeam->accounts()->first();
+        $account = $user->accounts()->first();
 
         expect($account)
             ->name->toBe('Default')
-            ->type->toBe(AccountType::CRYPTO)
-            ->team->is($user->currentTeam)->toBeTrue();
+            ->type->toBe(AccountType::CRYPTO);
 
         $this->assertAuthenticated();
         $response->assertRedirect(RouteServiceProvider::HOME);

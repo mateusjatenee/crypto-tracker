@@ -37,8 +37,8 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
             ]), function (User $user) {
-                $team = $this->createTeam($user);
-                $this->createDefaultAccount($team);
+                // $team = $this->createTeam($user);
+                $this->createDefaultAccount($user);
             });
         });
     }
@@ -58,9 +58,9 @@ class CreateNewUser implements CreatesNewUsers
         ]));
     }
 
-    protected function createDefaultAccount(Team $team)
+    protected function createDefaultAccount(User $user)
     {
-        $team->accounts()->create([
+        $user->accounts()->create([
             'name' => 'Default',
             'type' => AccountType::CRYPTO,
             'currency_id' => Currency::dollar()

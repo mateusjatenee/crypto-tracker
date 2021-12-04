@@ -22,7 +22,7 @@ it('creates an account', function () {
         ->call('createAccount')
         ->assertRedirect();
 
-    $account = $user->currentTeam->accounts()->first();
+    $account = $user->accounts()->first();
 
     expect($account)
         ->name->toBe('Test Account')

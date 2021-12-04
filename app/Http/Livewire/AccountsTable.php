@@ -24,7 +24,7 @@ class AccountsTable extends Component
 
     public function mount()
     {
-        $this->accounts = team()->accounts;
+        $this->accounts = auth()->user()->accounts;
     }
 
     public function render()
@@ -39,7 +39,7 @@ class AccountsTable extends Component
             'type' => ['required', Rule::in(Account::TYPES)]
         ]);
 
-        team()->accounts()->create([
+        auth()->user()->accounts()->create([
             'name' => $this->data['name'],
             'type' => $this->data['type'],
             'currency_id' => Currency::find($this->data['currency'])->id

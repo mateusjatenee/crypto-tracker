@@ -15,13 +15,13 @@ class CurrencySeeder extends Seeder
     public function run()
     {
         Currency::create([
-            'name' => 'Brazilian Real',
-            'code' => 'BRL'
+            'name' => 'U.S Dollar',
+            'code' => 'USD'
         ]);
 
         Currency::create([
-            'name' => 'U.S Dollar',
-            'code' => 'USD'
+            'name' => 'Brazilian Real',
+            'code' => 'BRL'
         ]);
     }
 }

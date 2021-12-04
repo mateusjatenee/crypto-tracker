@@ -25,14 +25,14 @@ class Transaction extends Model
         'date' => 'datetime'
     ];
 
-    public function team(): BelongsTo
-    {
-        return $this->belongsTo(Team::class);
-    }
-
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function user()
+    {
+        return $this->account->user();
     }
 
     public function asset(): BelongsTo

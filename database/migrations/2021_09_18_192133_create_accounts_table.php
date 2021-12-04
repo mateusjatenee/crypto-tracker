@@ -2,6 +2,7 @@
 
 use App\Models\Currency;
 use App\Models\Team;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +21,7 @@ class CreateAccountsTable extends Migration
             $table->string('name');
             $table->string('type');
             $table->foreignIdFor(Currency::class);
-            $table->foreignIdFor(Team::class);
+            $table->foreignIdFor(User::class);
             $table->timestamps();
         });
     }
