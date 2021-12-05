@@ -4,6 +4,8 @@ use App\Enums\AssetType;
 use App\Models\Asset;
 use App\Transactions\CryptoTransaction;
 use App\Transactions\StockTransaction;
+use Database\Factories\AssetFactory;
+use Database\Factories\PositionAggregateFactory;
 
 it('adds a cash transaction to an account', function () {
     $account = account();
@@ -106,4 +108,38 @@ it('allows you to add a transaction based solely in the crypto values', function
 
     expect($transaction)
         ->totalInvested()->toBe(5000.0);
+});
+
+it('gets a position aggregate for a given day', function () {
+    $account = account();
+    $asset = AssetFactory::new()->crypto()->create();
+
+    // adding another one on yesterday but a bit before
+    PositionAggregateFactory::new()->create([
+        'account_id' => $account->id,
+        'asset_id' => $asset->id,
+        'created_at' => now()->subDay()->subMinute(0)
+    ]);
+
+    $yesterdayAggregate = PositionAggregateFactory::new()->create([
+        'account_id' => $account->id,
+        'asset_id' => $asset->id,
+        'created_at' => now()->subDay()
+    ]);
+
+    $todayAggregate = PositionAggregateFactory::new()->create([
+        'account_id' => $account->id,
+        'asset_id' => $asset->id,
+        'created_at' => now()
+    ]);
+
+    expect($account)
+        ->lastPositionAggregateForAssetOnDate($asset, today()->subDay())
+        ->is($yesterdayAggregate)
+        ->toBeTrue();
+
+    expect($account)
+        ->lastPositionAggregateForAssetOnDate($asset, today())
+        ->is($todayAggregate)
+        ->toBeTrue();
 });

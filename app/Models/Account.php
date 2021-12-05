@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Position;
 use Carbon\Carbon;
 use App\Enums\AccountType;
 use App\Models\Transaction;
-use App\Contracts\Transactionable;
 use App\Services\AccountService;
+use App\Models\PositionAggregate;
+use App\Contracts\Transactionable;
+use App\Enums\PositionAggregateType;
 use Illuminate\Support\Collection;
 use App\Transactions\CashTransaction;
 use Illuminate\Database\Eloquent\Model;
@@ -46,6 +49,11 @@ class Account extends Model
         return $this->belongsTo(Currency::class);
     }
 
+    public function positionAggregates(): HasMany
+    {
+        return $this->hasMany(PositionAggregate::class);
+    }
+
     public function addTransaction(Transactionable $transactionable, Carbon $date = null): Transaction
     {
         return $this->transactions()->create([
@@ -82,5 +90,54 @@ class Account extends Model
     public function profit(): float
     {
         return $this->balance() - $this->totalInvested();
+    }
+
+    public function lastPositionAggregateForAsset(Asset $asset): ?PositionAggregate
+    {
+        return $this->positionAggregates()->where('asset_id', $asset->id)->latest('id')->first();
+    }
+
+    public function lastPositionAggregate(): ?PositionAggregate
+    {
+        return $this->positionAggregates()->whereNull('asset_id')->latest('id')->first();
+    }
+
+    public function lastPositionAggregateOnDate(Carbon $date): ?PositionAggregate
+    {
+        return $this->positionAggregates()
+            ->whereNull('asset_id')
+            ->whereDate('created_at', $date)
+            ->latest('id')
+            ->first();
+    }
+
+    public function lastPositionAggregateForAssetOnDate(Asset $asset, Carbon $date): ?PositionAggregate
+    {
+        return $this->positionAggregates()
+            ->where('asset_id', $asset->id)
+            ->whereDate('created_at', $date)
+            ->latest('id')
+            ->first();
+    }
+
+    public function storeAggregateForAccount(): PositionAggregate
+    {
+        return $this->positionAggregates()->create([
+            'quantity' => 1,
+            'asset_unitary_price' => $this->balance(),
+            'profit' => $this->profit(),
+            'type' => PositionAggregateType::ACCOUNT
+        ]);
+    }
+
+    public function storeAggregateForPosition(Position $position): PositionAggregate
+    {
+        return $this->positionAggregates()->create([
+            'quantity' => $position->quantity(),
+            'asset_unitary_price' => $position->asset->current_price,
+            'profit' => $position->totalProfit(),
+            'asset_id' => $position->asset->id,
+            'type' => PositionAggregateType::ASSET
+        ]);
     }
 }

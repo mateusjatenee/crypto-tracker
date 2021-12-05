@@ -32,7 +32,9 @@ class AssetFactory extends Factory
     {
         return $this->state(function ($state) {
             return [
-                'type' => AssetType::CRYPTO
+                'type' => AssetType::CRYPTO,
+                'current_price' => rand(100, 50000),
+                'code' => array_rand(['ETH', 'BTC', 'SOL'])
             ];
         });
     }
