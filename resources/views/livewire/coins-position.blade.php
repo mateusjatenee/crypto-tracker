@@ -18,7 +18,7 @@
                                     <h3 class="text-sm font-medium">{{ $position->asset->code }}</h3>
                                     <p class="text-sm text-gray-500">{{ number_format($position->quantity(), 8) }}</p>
                                 </div>
-                                <p class="text-sm text-gray-700 font-semibold">${{ number_format($position->totalPosition()) }}</p>
+                                <p class="text-sm text-gray-700 font-semibold">${{ number_format($position->totalPosition(), 2) }}</p>
                             </div>
                         </div>
                     </li>
