@@ -67,7 +67,8 @@ class Account extends Model
 
     public function positions(): Collection
     {
-        return resolve(AccountService::class)->getPositions($this);
+        return (new AccountService())->getPositions($this)
+            ->sortByDesc(fn (Position $position) => $position->totalPosition());
     }
 
     public function addCashTransaction(string $name, float $amount): Transaction
