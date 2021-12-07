@@ -21,6 +21,9 @@ class CreateTransactionsTable extends Migration
             $table->string('name')->nullable();
             $table->decimal('amount');
             $table->decimal('quantity', 27, 18);
+            $table->string('type');
+            $table->decimal('avg_price_then')->nullable();
+            $table->decimal('profit')->nullable();
             $table->timestamp('date');
             $table->foreignIdFor(Account::class);
             $table->foreignIdFor(Asset::class)->nullable();

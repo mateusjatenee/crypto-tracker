@@ -5,19 +5,25 @@ namespace App;
 use App\Models\Asset;
 use App\Models\Transaction;
 use Illuminate\Support\Collection;
+use App\Collections\TransactionCollection;
 
 class Position
 {
     public function __construct(
         public Asset $asset,
-        public Collection $transactions
+        public TransactionCollection $transactions
     ) {
         //
     }
 
     public function averagePrice(): float
     {
-        return $this->totalSpent() / $this->quantity();
+        return $this->totalSpent() / ($this->totalBought() ?: 1);
+    }
+
+    public function totalBought(): float
+    {
+        return $this->transactions->buy()->sum('quantity');
     }
 
     public function quantity(): float
@@ -27,7 +33,7 @@ class Position
 
     public function totalSpent(): float
     {
-        return $this->transactions->sum(fn (Transaction $transaction) => $transaction->totalInvested());
+        return $this->transactions->buy()->sum(fn (Transaction $transaction) => $transaction->totalInvested());
     }
 
     public function totalPosition(): float
@@ -35,9 +41,24 @@ class Position
         return $this->transactions->sum(fn (Transaction $transaction) => $transaction->total());
     }
 
+    public function realizedProfit(): float
+    {
+        return $this->transactions->sell()->sum(fn (Transaction $transaction) => $transaction->profit());
+    }
+
+    public function unrealizedProfit(): float
+    {
+        return $this->profitPerUnit() * $this->quantity();
+    }
+
+    public function profitPerUnit(): float
+    {
+        return $this->asset->current_price - $this->averagePrice();
+    }
+
     public function totalProfit(): float
     {
-        return $this->totalPosition() - $this->totalSpent();
+        return $this->realizedProfit() + $this->unrealizedProfit();
     }
 
     /**

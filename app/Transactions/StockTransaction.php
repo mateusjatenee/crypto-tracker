@@ -3,7 +3,9 @@
 namespace App\Transactions;
 
 use App\Models\Asset;
+use App\Enums\TransactionType;
 use App\Contracts\Transactionable;
+use App\Models\Transaction;
 
 class StockTransaction implements Transactionable
 {
@@ -33,5 +35,17 @@ class StockTransaction implements Transactionable
     public function asset(): ?Asset
     {
         return $this->asset;
+    }
+
+    public function type(): TransactionType
+    {
+        return $this->quantity() > 0
+            ? TransactionType::buy
+            : TransactionType::sell;
+    }
+
+    public function profit(float $buyPrice = null): ?float
+    {
+        return null;
     }
 }

@@ -35,7 +35,7 @@ it('gets assets based on crypto transactions', function () {
         new CryptoTransaction(45000, 1, $bitcoin)
     );
 
-    $positions = (new AccountService)->getPositions($account);
+    $positions = (new AccountService())->getPositions($account);
 
     expect($positions->first())
         ->averagePrice()->toBe(2000.0)
@@ -52,6 +52,52 @@ it('gets assets based on crypto transactions', function () {
         ->totalPosition()->toBe(40000.0)
         ->totalProfit()->toBe(-5000.0)
         ->asset->is($bitcoin)->toBeTrue();
+});
+
+it('builds a crypto position w/ sell transactions', function () {
+    $account = account();
+
+    $ethereum = Asset::factory()->create([
+        'type' => AssetType::CRYPTO,
+        'code' => 'ETH',
+        'current_price' => 500
+    ]);
+
+    // BUY 100 eth @ $100
+    $account->addTransaction(
+        new CryptoTransaction(100, 100, $ethereum)
+    );
+
+    // SELL 50 eth @ $200
+    $account->addTransaction(
+        new CryptoTransaction(200, -50, $ethereum)
+    );
+
+    // BALANCE 50 ETH @ $100(avg price = only BUY transactions)
+    // REALIZED GAINS = (200 (sell price) - 100 (buy price)) * 50 = 5000
+
+    // UNREALIZED GAINS = (500 - 100[avg_price]) * 50 = 20000
+    // TOTAL GAINS = RG + UG = 25000
+
+    // app calculation
+    // avg_price = (positive ops total) / (positive ops qty)
+    // avg_price = (100 * 100) / (100) = $100
+
+    // current position = (BUY qty - SELL qty) = 100 - 50
+    // current position = 50 eth
+    // current profit = (current price - pm) * current position
+    // current profit = (500 - 100) * 50 = 2000
+
+    // past profit = …sellTransactions.sum(t => t.profit) = 5000
+
+    expect($account->positions()->first())
+        ->quantity()->toEqual(50.0) // BALANCE 50 ETH @ $100(avg price: only include positive transactions)
+        ->averagePrice()->toEqual(100.0)
+        ->totalPosition()->toEqual(25000.0) // 50 * $500 (current price) = 25000
+        ->unrealizedProfit()->toEqual(20000.0)
+        ->realizedProfit()->toEqual(5000.0)
+        ->totalProfit()->toEqual(25000.0) // (50 * $500 (current price) - $100 (avg price)) = 20000 + $5000 (realized gains)
+        ->totalSpent()->toEqual(10000.0); // 100 eth @ $100
 });
 
 it('gets assets based on stocks transactions', function () {
@@ -81,7 +127,7 @@ it('gets assets based on stocks transactions', function () {
         new StockTransaction(50, 100, $airlineStock)
     );
 
-    $positions = (new AccountService)->getPositions($account);
+    $positions = (new AccountService())->getPositions($account);
 
     expect($positions->first())
         ->averagePrice()->toBe(16.50)

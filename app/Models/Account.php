@@ -4,13 +4,15 @@ namespace App\Models;
 
 use App\Position;
 use Carbon\Carbon;
+use App\Models\Asset;
 use App\Enums\AccountType;
 use App\Models\Transaction;
+use App\Enums\TransactionType;
 use App\Services\AccountService;
 use App\Models\PositionAggregate;
 use App\Contracts\Transactionable;
-use App\Enums\PositionAggregateType;
 use Illuminate\Support\Collection;
+use App\Enums\PositionAggregateType;
 use App\Transactions\CashTransaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -56,11 +58,18 @@ class Account extends Model
 
     public function addTransaction(Transactionable $transactionable, Carbon $date = null): Transaction
     {
+        $averagePrice = $this->positionForAsset($transactionable->asset)->averagePrice();
+
         return $this->transactions()->create([
             'name' => $transactionable->name(),
             'amount' => $transactionable->amount(),
             'quantity' => $transactionable->quantity(),
             'asset_id' => $transactionable->asset()?->id,
+            'type' => $transactionable->type(),
+            'avg_price_then' => $averagePrice,
+            'profit' => $transactionable->profit(
+                $this->positionForAsset($transactionable->asset)->averagePrice()
+            ),
             'date' => $date ?? now()
         ]);
     }
@@ -69,6 +78,14 @@ class Account extends Model
     {
         return (new AccountService())->getPositions($this)
             ->sortByDesc(fn (Position $position) => $position->totalPosition());
+    }
+
+    public function positionForAsset(Asset $asset): Position
+    {
+        return Position::fromTransactions(
+            $this->transactions()->where('asset_id', $asset->id)->get(),
+            $asset
+        );
     }
 
     public function addCashTransaction(string $name, float $amount): Transaction

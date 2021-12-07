@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Team;
 use App\Models\Account;
 use App\Models\Transaction;
+use App\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TransactionFactory extends Factory
@@ -26,6 +27,7 @@ class TransactionFactory extends Factory
         return [
             'name' => $this->faker->name,
             'amount' => rand(1, 1000),
+            'type' =>  TransactionType::buy,
             'account_id' => Account::factory(),
             'team_id' => Team::factory()
         ];

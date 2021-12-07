@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Model;
+use App\Collections\TransactionCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -14,6 +16,9 @@ class Transaction extends Model
         'name',
         'amount',
         'quantity',
+        'type',
+        'avg_price_then',
+        'profit',
         'date',
         'team_id',
         'asset_id'
@@ -22,6 +27,9 @@ class Transaction extends Model
     protected $casts = [
         'amount' => 'float',
         'quantity' => 'decimal:17',
+        'profit' => 'decimal:2',
+        'avg_price_then' => 'decimal:2',
+        'type' => TransactionType::class,
         'date' => 'datetime'
     ];
 
@@ -52,6 +60,13 @@ class Transaction extends Model
             : ($this->amount * $this->quantity);
     }
 
+    public function profit()
+    {
+        return $this->type === TransactionType::sell
+            ? ($this->amount - $this->avg_price_then) * abs($this->quantity)
+            : null;
+    }
+
     public function formattedQuantity()
     {
         return number_format($this->quantity, 8);
@@ -60,5 +75,17 @@ class Transaction extends Model
     public function formattedTotalInvested()
     {
         return number_format($this->totalInvested(), 2);
+    }
+
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array  $models
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new TransactionCollection($models);
     }
 }
