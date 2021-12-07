@@ -65,7 +65,6 @@ class Account extends Model
             'amount' => $transactionable->amount(),
             'quantity' => $transactionable->quantity(),
             'asset_id' => $transactionable->asset()?->id,
-            'type' => $transactionable->type(),
             'avg_price_then' => $averagePrice,
             'profit' => $transactionable->profit(
                 $this->positionForAsset($transactionable->asset)->averagePrice()

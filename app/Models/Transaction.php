@@ -16,7 +16,6 @@ class Transaction extends Model
         'name',
         'amount',
         'quantity',
-        'type',
         'avg_price_then',
         'profit',
         'date',
@@ -29,7 +28,6 @@ class Transaction extends Model
         'quantity' => 'decimal:17',
         'profit' => 'decimal:2',
         'avg_price_then' => 'decimal:2',
-        'type' => TransactionType::class,
         'date' => 'datetime'
     ];
 
@@ -62,9 +60,16 @@ class Transaction extends Model
 
     public function profit()
     {
-        return $this->type === TransactionType::sell
+        return $this->type() === TransactionType::sell
             ? ($this->amount - $this->avg_price_then) * abs($this->quantity)
             : null;
+    }
+
+    public function type(): TransactionType
+    {
+        return $this->quantity > 0
+            ? TransactionType::buy
+            : TransactionType::sell;
     }
 
     public function formattedQuantity()
