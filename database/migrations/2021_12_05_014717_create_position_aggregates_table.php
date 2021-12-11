@@ -21,6 +21,7 @@ class CreatePositionAggregatesTable extends Migration
             $table->decimal('asset_unitary_price');
             $table->decimal('profit');
             $table->string('type');
+            $table->dateTime('date');
             $table->foreignIdFor(Account::class);
             $table->foreignIdFor(Asset::class)->nullable();
             $table->timestamps();

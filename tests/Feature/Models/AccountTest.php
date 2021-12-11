@@ -93,19 +93,19 @@ it('gets a position aggregate for a given day', function () {
     PositionAggregateFactory::new()->create([
         'account_id' => $account->id,
         'asset_id' => $asset->id,
-        'created_at' => now()->subDay()->subMinute(0)
+        'date' => now()->subDay()->subMinute(0)
     ]);
 
     $yesterdayAggregate = PositionAggregateFactory::new()->create([
         'account_id' => $account->id,
         'asset_id' => $asset->id,
-        'created_at' => now()->subDay()
+        'date' => now()->subDay()
     ]);
 
     $todayAggregate = PositionAggregateFactory::new()->create([
         'account_id' => $account->id,
         'asset_id' => $asset->id,
-        'created_at' => now()
+        'date' => now()
     ]);
 
     expect($account)

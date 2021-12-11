@@ -16,13 +16,15 @@ class PositionAggregate extends Model
         'profit',
         'type',
         'account_id',
-        'asset_id'
+        'asset_id',
+        'date'
     ];
 
     protected $casts = [
         'quantity' => 'decimal:17',
         'asset_unitary_price' => 'decimal:2',
-        'profit' => 'decimal:2'
+        'profit' => 'decimal:2',
+        'date' => 'date'
     ];
 
     public function account(): BelongsTo

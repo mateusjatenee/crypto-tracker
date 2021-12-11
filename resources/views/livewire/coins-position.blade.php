@@ -15,10 +15,16 @@
                                 alt="">
                             <div class="flex-1 space-y-1">
                                 <div class="flex items-center justify-between">
-                                    <h3 class="text-sm font-medium">{{ $position->asset->code }}</h3>
+                                    <div class="inline-flex">
+                                        <h3 class="text-sm font-medium">{{ $position->asset->code }}</h3>
+                                        <x-percentage-pill :percentage="$position->profitPercentage()" />
+                                    </div>
                                     <p class="text-sm text-gray-500">{{ number_format($position->quantity(), 8) }}</p>
                                 </div>
-                                <p class="text-sm text-gray-700 font-semibold">${{ number_format($position->totalPosition(), 2) }}</p>
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm text-gray-700 font-semibold">${{ number_format($position->totalPosition(), 2) }}</p>
+                                    <p class="text-sm text-blue-400 font-semibold">{{ number_format($position->inPercentage(), 2) }}%</p>
+                                </div>
                             </div>
                         </div>
                     </li>

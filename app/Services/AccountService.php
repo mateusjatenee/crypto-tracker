@@ -21,8 +21,8 @@ class AccountService
                 ->with('asset')
                 ->get()
                 ->groupBy(fn ($transaction) => $transaction->asset->id)
-                ->map(function (Collection $transactions) {
-                    return Position::fromTransactions($transactions, $transactions->first()->asset);
+                ->map(function (Collection $transactions, $assetId) use ($account) {
+                    return new Position($account, $transactions->first()->asset, $transactions);
                 });
     }
 }

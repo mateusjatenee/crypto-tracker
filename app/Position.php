@@ -4,12 +4,15 @@ namespace App;
 
 use App\Models\Asset;
 use App\Models\Transaction;
+use App\Contracts\HasPositions;
 use Illuminate\Support\Collection;
+use Mattiasgeniar\Percentage\Percentage;
 use App\Collections\TransactionCollection;
 
 class Position
 {
     public function __construct(
+        public HasPositions $ledger,
         public Asset $asset,
         public TransactionCollection $transactions
     ) {
@@ -61,14 +64,27 @@ class Position
         return $this->realizedProfit() + $this->unrealizedProfit();
     }
 
+    public function inPercentage(): float
+    {
+        return number_format(Percentage::calculate($this->totalPosition(), $this->ledger->totalPosition()), 2);
+    }
+
+    public function profitPercentage(): float
+    {
+        return number_format(
+            Percentage::calculate($this->totalProfit(), $this->totalSpent()),
+            2
+        );
+    }
+
     /**
      * @param \Illuminate\Support\Collection<\App\Models\Transaction>
      * @param \App\Models\Asset
      *
      * @return static
      */
-    public static function fromTransactions(Collection $transactions, Asset $asset): self
+    public static function fromTransactions(HasPositions $ledger, Collection $transactions, Asset $asset): self
     {
-        return new static($asset, $transactions);
+        return new static($ledger, $asset, $transactions);
     }
 }

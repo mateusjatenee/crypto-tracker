@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\HasPositions;
 use App\Position;
 use Carbon\Carbon;
 use App\Models\Asset;
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Account extends Model
+class Account extends Model implements HasPositions
 {
     use HasFactory;
 
@@ -82,6 +83,7 @@ class Account extends Model
     public function positionForAsset(Asset $asset): Position
     {
         return Position::fromTransactions(
+            $this,
             $this->transactions()->where('asset_id', $asset->id)->get(),
             $asset
         );
@@ -104,6 +106,11 @@ class Account extends Model
         return $this->transactions->sum(fn (Transaction $transaction) => $transaction->totalInvested());
     }
 
+    public function totalPosition(): float
+    {
+        return $this->balance();
+    }
+
     public function profit(): float
     {
         return $this->balance() - $this->totalInvested();
@@ -123,7 +130,7 @@ class Account extends Model
     {
         return $this->positionAggregates()
             ->whereNull('asset_id')
-            ->whereDate('created_at', $date)
+            ->whereDate('date', $date)
             ->latest('id')
             ->first();
     }
@@ -132,24 +139,30 @@ class Account extends Model
     {
         return $this->positionAggregates()
             ->where('asset_id', $asset->id)
-            ->whereDate('created_at', $date)
+            ->whereDate('date', $date)
             ->latest('id')
             ->first();
     }
 
     public function storeAggregateForAccount(): PositionAggregate
     {
-        return $this->positionAggregates()->create([
+        return $this->positionAggregates()->updateOrCreate([
+            'date' => today(),
+            'type' => PositionAggregateType::ACCOUNT
+            ], [
             'quantity' => 1,
             'asset_unitary_price' => $this->balance(),
             'profit' => $this->profit(),
-            'type' => PositionAggregateType::ACCOUNT
         ]);
     }
 
     public function storeAggregateForPosition(Position $position): PositionAggregate
     {
-        return $this->positionAggregates()->create([
+        return $this->positionAggregates()->updateOrCreate([
+            'asset_id' => $position->asset->id,
+            'type' => PositionAggregateType::ASSET,
+            'date' => today()
+        ], [
             'quantity' => $position->quantity(),
             'asset_unitary_price' => $position->asset->current_price,
             'profit' => $position->totalProfit(),

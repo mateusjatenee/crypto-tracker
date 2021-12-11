@@ -21,6 +21,7 @@ class PositionAggregateFactory extends Factory
             'type' => PositionAggregateType::ASSET,
             'account_id' => fn () => AccountFactory::new()->create()->id,
             'asset_id' => fn () => AssetFactory::new()->create()->id,
+            'date' => today()
         ];
     }
 }

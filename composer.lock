@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "05782d34ee4b4b7651111b7d2264c72d",
+    "content-hash": "05b9d4d33599635a54d7c0b690e0caf2",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2327,6 +2327,66 @@
                 }
             ],
             "time": "2021-12-02T01:31:26+00:00"
+        },
+        {
+            "name": "mattiasgeniar/php-percentages",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mattiasgeniar/php-percentages.git",
+                "reference": "f65439e5f65e860b861cc929c08aa77eb8e56bc5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mattiasgeniar/php-percentages/zipball/f65439e5f65e860b861cc929c08aa77eb8e56bc5",
+                "reference": "f65439e5f65e860b861cc929c08aa77eb8e56bc5",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mattiasgeniar\\Percentage\\": "src"
+                },
+                "files": [
+                    "src/Helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mattias Geniar",
+                    "email": "m@ttias.be",
+                    "homepage": "https://ma.ttias.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A clean interface to calculate percentages in PHP: changes between values, percentage increases, partial values, ...",
+            "homepage": "https://github.com/mattiasgeniar/php-percentages",
+            "keywords": [
+                "mattiasgeniar",
+                "php-percentages"
+            ],
+            "support": {
+                "issues": "https://github.com/mattiasgeniar/php-percentages/issues",
+                "source": "https://github.com/mattiasgeniar/php-percentages/tree/1.3.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/mattiasgeniar",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-02-01T09:13:44+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
