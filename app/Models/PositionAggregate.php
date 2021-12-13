@@ -37,6 +37,11 @@ class PositionAggregate extends Model
         return $this->belongsTo(Asset::class);
     }
 
+    public function profit(): float
+    {
+        return $this->profit;
+    }
+
     public function total(): float
     {
         return $this->quantity * $this->asset_unitary_price;

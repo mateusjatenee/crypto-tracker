@@ -11,6 +11,13 @@ class PositionsChart extends Component
 {
     public Account $account;
 
+    public string $type = 'profit';
+
+    public array $types = [
+        'profit',
+        'total'
+    ];
+
     public function render()
     {
         return view('livewire.positions-chart', [
@@ -44,35 +51,19 @@ class PositionsChart extends Component
                 $model->addSeriesPoint(
                     $aggregate->assetName(),
                     $aggregate->created_at->toDateString(),
-                    (int) $aggregate->profit
+                    (int) $aggregate->{$this->type}()
                 );
             }
         }
 
         return $model;
+    }
 
-        $chart = LivewireCharts::lineChartModel();
-
-        foreach (CarbonPeriod::create(today()->subMonth(), today()) as $date) {
-            $chart->addPoint(
-                $date->format('Y-m-d'),
-                $date->format('Y-m-d')
-            );
-        }
-
-        dd($chart);
-
-        $positionAggregates = $this->account->positionAggregates()
-                                            ->where('created_at', '>', today()->subMonth())
-                                            ->get();
-
-        // foreach ($positionAggregates as $aggregate) {
-        //     $chart->addPoint(
-        //         $aggregate->date->toDateString(),
-        //         $aggregate->total()
-        //     );
-        // }
-
-        return $chart;
+    public function getTitleProperty(): string
+    {
+        return match ($this->type) {
+            'total' => 'Position over time',
+            'profit' => 'Profit over time'
+        };
     }
 }
