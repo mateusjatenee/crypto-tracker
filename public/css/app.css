@@ -1141,6 +1141,9 @@ select {
 .z-50 {
 	z-index: 50;
 }
+.order-first {
+	order: -9999;
+}
 .col-span-6 {
 	grid-column: span 6 / span 6;
 }
@@ -1155,6 +1158,12 @@ select {
 }
 .col-span-8 {
 	grid-column: span 8 / span 8;
+}
+.col-start-1 {
+	grid-column-start: 1;
+}
+.col-start-2 {
+	grid-column-start: 2;
 }
 .mx-auto {
 	margin-left: auto;
@@ -1235,15 +1244,6 @@ select {
 }
 .mr-1 {
 	margin-right: 0.25rem;
-}
-.-ml-1 {
-	margin-left: -0.25rem;
-}
-.mr-0\.5 {
-	margin-right: 0.125rem;
-}
-.mr-0 {
-	margin-right: 0px;
 }
 .-mt-px {
 	margin-top: -1px;
@@ -1621,10 +1621,6 @@ select {
 	--tw-bg-opacity: 1;
 	background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
 }
-.bg-green-100 {
-	--tw-bg-opacity: 1;
-	background-color: rgba(209, 250, 229, var(--tw-bg-opacity));
-}
 .bg-blue-600 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(37, 99, 235, var(--tw-bg-opacity));
@@ -1709,18 +1705,6 @@ select {
 .py-10 {
 	padding-top: 2.5rem;
 	padding-bottom: 2.5rem;
-}
-.px-2\.5 {
-	padding-left: 0.625rem;
-	padding-right: 0.625rem;
-}
-.py-0\.5 {
-	padding-top: 0.125rem;
-	padding-bottom: 0.125rem;
-}
-.py-0 {
-	padding-top: 0px;
-	padding-bottom: 0px;
 }
 .pt-6 {
 	padding-top: 1.5rem;
@@ -1900,10 +1884,6 @@ select {
 	--tw-text-opacity: 1;
 	color: rgba(59, 130, 246, var(--tw-text-opacity));
 }
-.text-green-800 {
-	--tw-text-opacity: 1;
-	color: rgba(6, 95, 70, var(--tw-text-opacity));
-}
 .text-gray-200 {
 	--tw-text-opacity: 1;
 	color: rgba(229, 231, 235, var(--tw-text-opacity));
@@ -1911,14 +1891,6 @@ select {
 .text-gray-300 {
 	--tw-text-opacity: 1;
 	color: rgba(209, 213, 219, var(--tw-text-opacity));
-}
-.text-blue-800 {
-	--tw-text-opacity: 1;
-	color: rgba(30, 64, 175, var(--tw-text-opacity));
-}
-.text-blue-700 {
-	--tw-text-opacity: 1;
-	color: rgba(29, 78, 216, var(--tw-text-opacity));
 }
 .text-blue-400 {
 	--tw-text-opacity: 1;
@@ -2219,6 +2191,14 @@ select {
 }
 @media (min-width: 640px) {
 
+	.sm\:order-first {
+		order: -9999;
+	}
+
+	.sm\:order-last {
+		order: 9999;
+	}
+
 	.sm\:col-span-4 {
 		grid-column: span 4 / span 4;
 	}
@@ -2498,10 +2478,6 @@ select {
 		margin-top: 0px;
 	}
 
-	.md\:mt-2 {
-		margin-top: 0.5rem;
-	}
-
 	.md\:block {
 		display: block;
 	}
@@ -2555,10 +2531,6 @@ select {
 	.lg\:-mx-8 {
 		margin-left: -2rem;
 		margin-right: -2rem;
-	}
-
-	.lg\:mt-0 {
-		margin-top: 0px;
 	}
 
 	.lg\:flex {

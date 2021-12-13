@@ -41,4 +41,9 @@ class PositionAggregate extends Model
     {
         return $this->quantity * $this->asset_unitary_price;
     }
+
+    public function assetName(): string
+    {
+        return $this->asset->name ?? 'Account';
+    }
 }
