@@ -14,7 +14,7 @@ class Stat extends Component
     public function __construct(
         public string $name,
         public float $value,
-        public float $increase
+        public ?float $increase = null
     ) {
         //
     }
@@ -32,10 +32,5 @@ class Stat extends Component
     public function formattedValue(): string
     {
         return number_format($this->value, 2);
-    }
-
-    public function increaseInPercentage(): string
-    {
-        return $this->increase * 100;
     }
 }
