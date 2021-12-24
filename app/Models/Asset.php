@@ -52,10 +52,10 @@ class Asset extends Model
             'current_price' => $freshAsset->price
         ]);
 
-        $this->prices()->create([
-            'price' => $freshAsset->price,
-            'local_price' => $freshAsset->price
-        ]);
+        // $this->prices()->create([
+        //     'price' => $freshAsset->price,
+        //     'local_price' => $freshAsset->price
+        // ]);
     }
 
     public function iconUrl(): string
