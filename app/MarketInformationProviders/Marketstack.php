@@ -28,7 +28,7 @@ class Marketstack implements MarketProvider
     {
         return $this->client()
              ->get('eod', [
-                 'access_key' => '1711f436d939f671dc9233fe52ac876d',
+                 'access_key' => config('market-information-providers.marketstack.api_key'),
                  'symbols' => $ticker
              ])->json();
     }
