@@ -25,16 +25,6 @@ class FetchCoinsPrices extends Command
     protected $shouldQuit = false;
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int
@@ -42,8 +32,6 @@ class FetchCoinsPrices extends Command
     public function handle()
     {
         $this->info('Fetching coin prices.');
-
-        $this->listenForSignals();
 
         while (true) {
             if ($this->shouldQuit) {
@@ -54,12 +42,30 @@ class FetchCoinsPrices extends Command
             sleep(20);
         }
     }
-
-    public function listenForSignals()
+    
+    /**
+     * Get the list of signals handled by the command.
+     *
+     * @return array
+     */
+    public function getSubscribedSignals(): array
     {
-        pcntl_signal(SIGTERM, function () {
+        return [SIGTERM];
+    }
+    
+    /**
+     * Handle an incoming signal.
+     *
+     * @param  int  $signal
+     * @return void
+     */
+    public function handleSignal(int $signal): void
+    {
+        if ($signal === SIGTERM) {
             $this->shouldQuit = true;
-        });
+
+            return;
+        }
     }
 
     protected function fetchPrices()
