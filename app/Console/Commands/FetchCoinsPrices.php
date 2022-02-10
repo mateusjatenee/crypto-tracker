@@ -2,11 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\UpdateCryptoAssetPrice;
 use App\Models\Asset;
 use Illuminate\Console\Command;
+use App\Jobs\UpdateCryptoAssetPrice;
+use Symfony\Component\Console\Command\SignalableCommandInterface;
 
-class FetchCoinsPrices extends Command
+class FetchCoinsPrices extends Command implements SignalableCommandInterface
 {
     /**
      * The name and signature of the console command.
@@ -20,10 +21,8 @@ class FetchCoinsPrices extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
-
-    protected $shouldQuit = false;
-
+    protected $description = 'Fetch Crypt asset prices';
+    
     /**
      * Create a new command instance.
      *
@@ -34,39 +33,47 @@ class FetchCoinsPrices extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
+    public function handle(): void
     {
-        $this->info('Fetching coin prices.');
+        $this->newLine();
 
-        $this->listenForSignals();
+        $this->line('<bg=yellow;fg=red;options=bold> ATTENTION </> This command runs indefinitely. Press <fg=green>Ctrl + C</> to quit.');
+        
+        $this->newLine();
 
+        $this->output->write('<fg=green>fetching prices</>', false);
+
+        /** @phpstan-ignore-next-line */
         while (true) {
-            if ($this->shouldQuit) {
-                return false;
-            }
-
             $this->fetchPrices();
             sleep(20);
         }
     }
 
-    public function listenForSignals()
+
+    protected function fetchPrices(): void
     {
-        pcntl_signal(SIGTERM, function () {
-            $this->shouldQuit = true;
+        Asset::crypto()->get()->each(function (Asset $asset) {
+            UpdateCryptoAssetPrice::dispatch($asset);
+            $this->output->write('<fg=green>.</>', false);
         });
     }
 
-    protected function fetchPrices()
+    public function handleSignal(int $signal): void
     {
-        $this->info('Fetching...');
-        Asset::crypto()->get()->each(function (Asset $asset) {
-            UpdateCryptoAssetPrice::dispatch($asset);
-        });
+        $this->newLine(2);
+        $this->info('<bg=blue;fg=white;options=bold> DONE! </>');
+        
+        exit;
+    }
+
+
+    /**
+     *
+     * @return  array<int,int>
+    */
+    public function getSubscribedSignals(): array
+    {
+        return [SIGINT, SIGTERM];
     }
 }
