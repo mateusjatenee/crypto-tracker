@@ -31,6 +31,6 @@ class Stat extends Component
 
     public function formattedValue(): string
     {
-        return number_format($this->value, 2);
+        return $this->value != 0 ? number_format($this->value, 2) : 0;
     }
 }
