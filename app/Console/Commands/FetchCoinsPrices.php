@@ -64,7 +64,7 @@ class FetchCoinsPrices extends Command implements SignalableCommandInterface
         $this->newLine(2);
         $this->info('<bg=blue;fg=white;options=bold> DONE! </>');
         
-        exit;
+        exit(0);
     }
 
 
