@@ -20,7 +20,7 @@ class LoadCryptoAssets extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Load crypto assets';
 
     /**
      * Create a new command instance.
@@ -37,7 +37,7 @@ class LoadCryptoAssets extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         foreach ($this->getAssets() as $asset) {
             Asset::firstOrCreate(['code' => $asset['code']], [
@@ -46,7 +46,11 @@ class LoadCryptoAssets extends Command
             ]);
         }
 
-        $this->info('Loaded.');
+        $this->newLine();
+
+        $this->info('<bg=green;fg=black;options=bold> OK </> Crypto Assets loaded successfully.');
+
+        return Self::SUCCESS;
     }
 
     public function getAssets(): array
