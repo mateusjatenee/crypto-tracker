@@ -17,7 +17,10 @@ class StatsGrid extends Component
 
     public function getProfitInPercentageProperty(): float
     {
-        return number_format(
+        if ($this->account->profit() == 0 || $this->account->totalInvested() == 0) {
+            return 0;
+        }
+        number_format(
             Percentage::calculate($this->account->profit(), $this->account->totalInvested()),
             2
         );
