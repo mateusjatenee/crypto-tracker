@@ -12,6 +12,7 @@ cd crypto-tracker
 composer install
 cp .env.example .env
 php artisan key:generate
+php artisan migrate
 ```   
 
 After you add your DB credentials, you can run `php artisan db:seed` to generate a test user: `test@test.com` / `password`.   
