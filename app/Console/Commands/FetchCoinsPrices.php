@@ -58,7 +58,7 @@ class FetchCoinsPrices extends Command implements SignalableCommandInterface
                 UpdateCryptoAssetPrice::dispatch($asset);
                 $this->output->write('<fg=green>.</>');
             }
-            catch (Exception $exception) {
+            catch (\Exception $exception) {
                 $this->output->write('<fg=red>.</>');
             }
         });
