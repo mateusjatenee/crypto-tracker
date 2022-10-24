@@ -54,8 +54,17 @@ class FetchCoinsPrices extends Command implements SignalableCommandInterface
     protected function fetchPrices(): void
     {
         Asset::crypto()->get()->each(function (Asset $asset) {
-            UpdateCryptoAssetPrice::dispatch($asset);
-            $this->output->write('<fg=green>.</>', false);
+            try {
+                UpdateCryptoAssetPrice::dispatch($asset);
+                $this->output->write('<fg=green>.</>');
+            }
+            catch (\Illuminate\Http\Client\ConnectionException $exception) {
+                $this->output->write('<fg=red>Connection failed, retrying...</>');
+            }
+            catch (\Exception $exception) {
+                $this->output->write('<fg=red>' . $exception->getMessage() . '</>');
+                die;
+            }
         });
     }
 
